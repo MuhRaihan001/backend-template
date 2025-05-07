@@ -62,6 +62,8 @@ export async function loadApi(app: Express, apiFolder: string) : Promise<void> {
             console.log(`✅ | API : ${routeBasePath} Loaded`);
         }catch(error){
             console.log(`Failed to load route file: ${routePath}`, error);
+        }finally{
+            console.log(`Loading API finished`);
         }
     }
 }
