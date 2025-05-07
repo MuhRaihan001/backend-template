@@ -149,11 +149,11 @@ This will serve your React app from the specified directory (`FRONTEND_PATH`) an
 
 ## 🛠️ Getting Started
 
-### 1. Clone the Repository
+### 1. Using NPX
 
 ```bash
-git clone https://github.com/your-username/tsumux-backend-template.git
-cd tsumux-backend-template
+npx degit MuhRaihan001/backend-template my-new-project
+cd my-new-project
 ```
 
 ### 2. Install Dependencies
