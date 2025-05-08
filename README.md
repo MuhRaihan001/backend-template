@@ -1,5 +1,7 @@
 
-```markdown
+---
+
+````markdown
 # 🧩 TsumuX Backend Template
 
 A modular, production-ready Express backend boilerplate designed for scalable APIs. It features dynamic route loading, JWT authentication, MySQL integration, and React frontend handling — all pre-configured to jumpstart your backend projects.
@@ -14,6 +16,7 @@ A modular, production-ready Express backend boilerplate designed for scalable AP
 - **MySQL Query Wrapper**: Lightweight connection pool with asynchronous query execution.
 - **Setup**: Built-in support for `.env`, CORS, and JSON body parsing.
 - **React Frontend Handling**: Serve a React app directly from the backend, with automatic serving of `index.html` and static files for optimized delivery.
+- **Modular Rate Limiting**: Dynamically enable and configure request throttling for your API with one function.
 
 ---
 
@@ -36,10 +39,10 @@ ACCESS_CODE=your_jwt_secret
 # React Frontend Path (optional)
 FRONTEND_PATH=path/to/your/frontend/build
 
-#admin
-ADMIN_USERNAME
-ADMIN_PASSWORD
-```
+# Admin
+ADMIN_USERNAME=your_admin_username
+ADMIN_PASSWORD=your_admin_password
+````
 
 ---
 
@@ -47,27 +50,24 @@ ADMIN_PASSWORD
 
 ### 1. 📡 Dynamic API Endpoint
 
-Create a new route file:
-
 ```ts
-// File: API/ping.ts
-import { Router } from 'express';
-const router = Router();
+// File: API/hello.ts
+import express, { Request, Response } from 'express';
 
-router.get('/', (req, res) => {
-    res.json({ message: 'pong' });
-});
+const router = express.Router();
+
+router.get('/', (req: Request, res: Response) => {
+    res.send('Hello, World!');
+})
 
 export default router;
 ```
 
-**Access it via:** `GET /api/ping`
+**Access it via:** `GET /api/hello`
 
 ---
 
 ### 2. 🔐 Generate Token
-
-Generate a JWT token:
 
 ```ts
 import { generateToken } from '../middleware/token-handler';
@@ -79,8 +79,6 @@ console.log(token);
 ---
 
 ### 3. 🔍 Verify Token Middleware
-
-Use this middleware for protected routes:
 
 ```ts
 import { Router } from 'express';
@@ -99,8 +97,6 @@ export default router;
 
 ### 4. 🧱 Check Role Authorization
 
-Check user permissions:
-
 ```ts
 import { checkRolePermission } from '../middleware/authorization';
 
@@ -112,8 +108,6 @@ console.log(canAccess); // true
 
 ### 5. 📘 MySQL Query Example
 
-Execute a MySQL query:
-
 ```ts
 import { executeQuery } from '../config/database';
 
@@ -124,14 +118,6 @@ console.log(users);
 ---
 
 ### 6. 🎨 Serve React App
-
-To serve a React frontend from your backend, first build your React app using:
-
-```bash
-npm run build
-```
-
-Then, in your backend `app.ts` or `server.ts`, add the following:
 
 ```ts
 import express from 'express';
@@ -147,7 +133,28 @@ app.listen(3000, () => {
 });
 ```
 
-This will serve your React app from the specified directory (`FRONTEND_PATH`) and handle all routes automatically.
+---
+
+### 7. 🚦 Enable Rate Limiter
+
+You can dynamically enable rate limiting by calling `setLimiterOptions` before starting the server:
+
+```ts
+// File: app.ts or server.ts
+import express from 'express';
+import { setLimiterOptions, getLimiterMiddleware } from './middleware/rateLimiter';
+
+const app = express();
+
+// Enable rate limiting: 10 requests per 60 seconds
+setLimiterOptions(60, 10, "Terlalu banyak request, coba lagi nanti", 429);
+
+// Apply middleware only if enabled
+const limiter = getLimiterMiddleware();
+if (limiter) app.use(limiter);
+```
+
+This approach makes your limiter optional and fully configurable.
 
 ---
 
@@ -195,4 +202,7 @@ No need to register them manually — it just works™️.
 ## 📄 License
 
 MIT License © 2025 TsumuX
+
 ```
+
+---
