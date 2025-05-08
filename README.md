@@ -173,8 +173,9 @@ Fill in the environment variables as shown above.
 ### 4. Start the Server
 
 ```bash
-npm run dev  # for development (with nodemon)
-npm run start # for production
+npm run build # To build typescript -> dist/
+npm start # Start build result
+npm run dev # To test typescript (ts-node)
 ```
 
 ---
