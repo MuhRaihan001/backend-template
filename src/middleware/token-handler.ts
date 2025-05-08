@@ -16,13 +16,13 @@ export async function generateToken(duration: number, data: any = {}){
     }
 }
 
-export async function verifyToken(req: Request, res: Response, next: NextFunction) {
+export function verifyToken(req: Request, res: Response, next: NextFunction) {
     try{
         const token = req.headers['authorization']?.split(' ')[1];
-        if(!token) return res.status(401).json({ error: 'Unauthorized' });
+        if(!token) res.status(401).json({ error: 'Unauthorized' });
         const secretKey = process.env.ACCESS_CODE as string;
         if(!secretKey) throw new Error('ACCESS_CODE not found in environment variables.');
-        const decoded = await jwt.verify(token, secretKey);
+        const decoded = jwt.verify(token as string, secretKey);
         req.user = decoded;
         next();
 

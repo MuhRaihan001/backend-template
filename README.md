@@ -35,6 +35,10 @@ ACCESS_CODE=your_jwt_secret
 
 # React Frontend Path (optional)
 FRONTEND_PATH=path/to/your/frontend/build
+
+#admin
+ADMIN_USERNAME
+ADMIN_PASSWORD
 ```
 
 ---
